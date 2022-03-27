@@ -53,3 +53,4 @@
   - `GET /users` & `GET /users/:id` => les utilisateurs ayant les rôles ADMIN / MEMBER ont le droit
   - `POST /users` & `PUT /users/:id` & `DELETE /users/:id` => seulent les ADMIN ont le droit
 - Gérez en conséquence les retours d'erreurs de façon à avoir des erreurs compréhensibles pour ceux qui utiliseront les API de votre back-end
+- Pour le `secret` permettant la génération du JWT, utilisez une **variable d'environnement** dédiée à ce besoin (cherchez donc à comprendre ce que sont les "variables d'environnement" ainsi que leurs utilités)
