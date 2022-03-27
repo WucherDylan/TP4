@@ -1,0 +1,24 @@
+const express = require('express');
+const router = express.Router();
+const userRepository = require('../models/user-repository');
+const { passwordsAreEqual } = require('../security/crypto');
+const { generateAuthToken } = require('../security/auth');
+
+router.post('/login', (req, res) => {
+  const { firstName, password } = req.body;
+
+  const user = userRepository.getUserByFirstName(firstName);
+  if (!passwordsAreEqual(password, user.password)) {
+    res.status(401).send('Bad credentials');
+
+    return;
+  }
+
+  const token = generateAuthToken(user.id, user.firstName, user.roles);
+
+  res.json({ token });
+});
+
+exports.initializeRoutes = () => {
+  return router;
+}

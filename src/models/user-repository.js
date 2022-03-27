@@ -1,6 +1,6 @@
 const { users } = require('./db');
-const md5 = require('md5');
 const uuid = require('uuid');
+const { generateHashedPassword } = require('../security/crypto');
 
 exports.getUsers = () => {
   return users;
@@ -16,13 +16,12 @@ exports.getUserByFirstName = (firstName) => {
   return foundUser;
 };
 
-exports.createUser = (data) => {
-  const user = {
-    id: uuid.v4(),
-    firstName: data.firstName,
-    lastName: data.lastName,
-    password: md5(data.password),
-  };
+exports.createUser = (body) => {
+  const hashedPassword = generateHashedPassword(body.password);
+  const user = body;
+  user.id = uuid.v4();
+  user.password = hashedPassword;
+  user.roles = ['MEMBER'];
 
   users.push(user);
 };
