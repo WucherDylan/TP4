@@ -53,3 +53,4 @@
   - `POST /users` & `PUT /users/:id` & `DELETE /users/:id` => seul les ADMIN ont le droit
 - Gérez en conséquence les retours d'erreurs de façon à avoir des erreurs compréhensibles pour ceux qui utiliseront les API de votre back-end
 - Pour le `secret` permettant la génération du JWT, utilisez une **variable d'environnement** dédiée à ce besoin (cherchez donc à comprendre ce que sont les "variables d'environnement" ainsi que leurs utilités)
+- Lors de la création du JWT, rajoutez lui une durée de 1h avant expiration. Cette information doit également se retrouver dans une variable d'environnement dédiée
