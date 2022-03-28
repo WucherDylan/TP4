@@ -19,6 +19,4 @@ router.post('/login', (req, res) => {
   res.json({ token });
 });
 
-exports.initializeRoutes = () => {
-  return router;
-}
+exports.initializeRoutes = () => router;

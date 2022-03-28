@@ -2,9 +2,7 @@ const { users } = require('./db');
 const uuid = require('uuid');
 const { generateHashedPassword } = require('../security/crypto');
 
-exports.getUsers = () => {
-  return users;
-};
+exports.getUsers = () => users;
 
 exports.getUserByFirstName = (firstName) => {
   return users.find((user) => user.firstName == firstName);
