@@ -3,20 +3,29 @@ const router = express.Router();
 const userRepository = require('../models/user-repository');
 const { passwordsAreEqual } = require('../security/crypto');
 const { generateAuthToken } = require('../security/auth');
+const { body } = require('express-validator');
+const { validateBody } = require('./validation/route.validator');
 
-router.post('/login', (req, res) => {
-  const { firstName, password } = req.body;
+router.post(
+  '/login',
+  body('firstName').notEmpty(),
+  body('password').notEmpty(),
+  (req, res) => {
+    validateBody(req);
 
-  const user = userRepository.getUserByFirstName(firstName);
-  if (!user || !passwordsAreEqual(password, user.password)) {
-    res.status(401).send('Unauthorized');
+    const { firstName, password } = req.body;
 
-    return;
+    const user = userRepository.getUserByFirstName(firstName);
+    if (!user || !passwordsAreEqual(password, user.password)) {
+      res.status(401).send('Unauthorized');
+
+      return;
+    }
+
+    const token = generateAuthToken(user.id, user.firstName, user.roles);
+
+    res.json({ token });
   }
-
-  const token = generateAuthToken(user.id, user.firstName, user.roles);
-
-  res.json({ token });
-});
+);
 
 exports.initializeRoutes = () => router;

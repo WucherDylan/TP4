@@ -27,7 +27,7 @@ exports.updateUser = (id, data) => {
 
   foundUser.firstName = data.firstName || foundUser.firstName;
   foundUser.lastName = data.lastName || foundUser.lastName;
-  foundUser.password = data.password ? md5(data.password) : foundUser.password;
+  foundUser.password = data.password ? generateHashedPassword(data.password) : foundUser.password;
 };
 
 exports.deleteUser = (id) => {

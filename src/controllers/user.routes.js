@@ -1,6 +1,8 @@
 const express = require('express');
+const { body } = require('express-validator');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
+const { validateBody } = require('./validation/route.validator');
 const guard = require('express-jwt-permissions')({
   permissionsProperty: 'roles',
 });
@@ -22,16 +24,25 @@ router.get('/:firstName', guard.check(adminOrMemberRoles), (req, res) => {
   res.send(foundUser);
 });
 
-router.post('/', guard.check(adminRole), (req, res) => {
-  const existingUser = userRepository.getUserByFirstName(req.body.firstName);
+router.post(
+  '/',
+  guard.check(adminRole),
+  body('firstName').notEmpty(),
+  body('lastName').notEmpty(),
+  body('password').notEmpty().isLength({ min: 5 }),
+  (req, res) => {
+    validateBody(req);
 
-  if (existingUser) {
-    throw new Error('Unable to create the user');
+    const existingUser = userRepository.getUserByFirstName(req.body.firstName);
+
+    if (existingUser) {
+      throw new Error('Unable to create the user');
+    }
+
+    userRepository.createUser(req.body);
+    res.status(201).end();
   }
-
-  userRepository.createUser(req.body);
-  res.status(201).end();
-});
+);
 
 router.put('/:id', guard.check(adminRole), (req, res) => {
   userRepository.updateUser(req.params.id, req.body);
