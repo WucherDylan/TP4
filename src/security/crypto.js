@@ -4,6 +4,6 @@ exports.generateHashedPassword = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(12));
 }
 
-exports.passwordsAreEqual = (pwd1, pwd2) => {
-  return bcrypt.compareSync(pwd1, pwd2);
+exports.passwordsAreEqual = (rawPassword, hashedPassword) => {
+  return bcrypt.compareSync(rawPassword, hashedPassword);
 }
