@@ -8,8 +8,8 @@ router.post('/login', (req, res) => {
   const { firstName, password } = req.body;
 
   const user = userRepository.getUserByFirstName(firstName);
-  if (!passwordsAreEqual(password, user.password)) {
-    res.status(401).send('Bad credentials');
+  if (!user || !passwordsAreEqual(password, user.password)) {
+    res.status(401).send('Unauthorized');
 
     return;
   }

@@ -1,12 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
-
-router.get('/', (req, res) => {
-  res.send(userRepository.getUsers())
+const guard = require('express-jwt-permissions')({
+  permissionsProperty: 'roles',
 });
 
-router.get('/:firstName', (req, res) => {
+const adminRole = 'ADMIN';
+const adminOrMemberRoles = [[adminRole], ['MEMBER']];
+
+router.get('/', guard.check(adminOrMemberRoles), (req, res) => {
+  res.send(userRepository.getUsers());
+});
+
+router.get('/:firstName', guard.check(adminOrMemberRoles), (req, res) => {
   const foundUser = userRepository.getUserByFirstName(req.params.firstName);
 
   if (!foundUser) {
@@ -16,7 +22,7 @@ router.get('/:firstName', (req, res) => {
   res.send(foundUser);
 });
 
-router.post('/', (req, res) => {
+router.post('/', guard.check(adminRole), (req, res) => {
   const existingUser = userRepository.getUserByFirstName(req.body.firstName);
 
   if (existingUser) {
@@ -27,16 +33,14 @@ router.post('/', (req, res) => {
   res.status(201).end();
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', guard.check(adminRole), (req, res) => {
   userRepository.updateUser(req.params.id, req.body);
   res.status(204).end();
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', guard.check(adminRole), (req, res) => {
   userRepository.deleteUser(req.params.id);
   res.status(204).end();
 });
 
-exports.initializeRoutes = () => {
-  return router;
-}
+exports.initializeRoutes = () => router;

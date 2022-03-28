@@ -7,9 +7,7 @@ exports.getUsers = () => {
 };
 
 exports.getUserByFirstName = (firstName) => {
-  const foundUser = users.find((user) => user.firstName == firstName);
-
-  return foundUser;
+  return users.find((user) => user.firstName == firstName);
 };
 
 exports.createUser = (body) => {
