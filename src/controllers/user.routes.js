@@ -17,6 +17,12 @@ router.get('/:firstName', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+  const existingUser = userRepository.getUserByFirstName(req.body.firstName);
+
+  if (existingUser) {
+    throw new Error('Unable to create the user');
+  }
+
   userRepository.createUser(req.body);
   res.status(201).end();
 });
