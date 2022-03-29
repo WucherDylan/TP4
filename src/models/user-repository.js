@@ -1,6 +1,5 @@
 const { users } = require('./db');
 const uuid = require('uuid');
-const { generateHashedPassword } = require('../security/crypto');
 
 exports.getUsers = () => users;
 
@@ -9,11 +8,8 @@ exports.getUserByFirstName = (firstName) => {
 };
 
 exports.createUser = (body) => {
-  const hashedPassword = generateHashedPassword(body.password);
   const user = body;
   user.id = uuid.v4();
-  user.password = hashedPassword;
-  user.roles = ['MEMBER'];
 
   users.push(user);
 };
@@ -27,7 +23,7 @@ exports.updateUser = (id, data) => {
 
   foundUser.firstName = data.firstName || foundUser.firstName;
   foundUser.lastName = data.lastName || foundUser.lastName;
-  foundUser.password = data.password ? generateHashedPassword(data.password) : foundUser.password;
+  foundUser.password = data.password || foundUser.password;
 };
 
 exports.deleteUser = (id) => {
