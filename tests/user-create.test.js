@@ -3,7 +3,6 @@ const request = require('supertest');
 test('POST /users => success', async () => {
   const res = await request(apiUrl)
     .post('/users')
-    .set('Authorization', `Bearer ${jwt}`)
     .send({
       firstName: 'Blablabla',
       lastName: 'Blublublu',
@@ -16,7 +15,6 @@ test('POST /users => success', async () => {
 test('POST /users => without "lastName" should fail', async () => {
   const res = await request(apiUrl)
     .post('/users')
-    .set('Authorization', `Bearer ${jwt}`)
     .send({
       firstName: 'Blablabla',
       password: 'Blobloblo',
@@ -29,7 +27,6 @@ test('POST /users => without "lastName" should fail', async () => {
 test('POST /users', async () => {
   const res = await request(apiUrl)
     .post('/users')
-    .set('Authorization', `Bearer ${jwt}`)
     .send({
       firstName: 'Blablabla',
       lastName: 'Blublublu',
