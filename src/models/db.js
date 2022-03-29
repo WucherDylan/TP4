@@ -1,8 +1,10 @@
-exports.users = [
-  {
-    id: 'f22c2fc9-6062-480a-bc81-6ad66c044c51',
-    firstName: 'Charlely',
-    lastName: 'Delgrange',
-    password: 'password',
-  }
-];
+const { Sequelize } = require('sequelize');
+
+exports.sequelize = new Sequelize({
+  dialect: 'postgres',
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DB,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  port: process.env.POSTGRES_PORT,
+});
