@@ -1,22 +1,7 @@
 const request = require('supertest');
 
-test('GET /users without jwt', async () => {
-  const res = await request(apiUrl).get('/users');
-
-  expect(res.statusCode).toEqual(500);
-});
-
-test('GET /users with jwt', async () => {
-  let res = await request(apiUrl)
-    .post('/login')
-    .send({
-      firstName: 'Charlely',
-      password: 'password',
-    });
-
-  const jwt = res.body.token;
-
-  res = await request(apiUrl)
+test('GET /users', async () => {
+  const res = await request(apiUrl)
     .get('/users')
     .set('Authorization', `Bearer ${jwt}`);
 
